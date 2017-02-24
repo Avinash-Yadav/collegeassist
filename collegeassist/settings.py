@@ -25,6 +25,8 @@ SECRET_KEY = 'w&+sooyx&auoirldfpp#1d*jdpls0+o6h1qyx_a_&d4eq#q=9m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = 'assist.User'
+
 ALLOWED_HOSTS = []
 
 
