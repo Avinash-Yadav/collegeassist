@@ -1,2 +1,2 @@
-# newsapp
-A news fetching service
+# collegeassist
+A django app for Courses content management for yearly record
