@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email,password,'super',True,True,**extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    registration_no = models.CharField(max_length=20,blank=False,null=False)
+    registration_no = models.CharField(max_length=20,blank=True,null=True)
     email           = models.EmailField(_('email address'), unique=True)
     first_name      = models.CharField(_('first name'), max_length=30, blank=True)
     last_name       = models.CharField(_('last name'), max_length=30, blank=True)
@@ -57,6 +57,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         # pass
         verbose_name = _('user')
         verbose_name_plural = _('users')
+    
+    def __str__(self):
+        return self.first_name +" "+self.last_name
 
     def get_full_name(self):
         '''
@@ -92,7 +95,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Department(models.Model):
     name    = models.CharField(max_length = 50,blank=False,null=False)
     acronym = models.CharField(max_length=10,blank=False,null=False)
-
+    
+    def __str__(self):
+        return self.acronym
+        
 class Course(models.Model):
     name    = models.CharField(max_length=50,blank=False,null=False)
     dept    = models.ForeignKey('Department')
+    code    = models.CharField(max_length=10,blank=False,null=False,unique=True)
+    
+    def __str__(self):
+        return self.name
+        
