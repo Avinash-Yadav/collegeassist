@@ -4,6 +4,7 @@ from django.contrib.auth.models import User,update_last_login,PermissionsMixin ,
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -38,7 +39,6 @@ class UserManager(BaseUserManager):
         return self._create_user(email,password,'super',True,True,**extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    registration_no = models.CharField(max_length=20,blank=True,null=True)
     email           = models.EmailField(_('email address'), unique=True)
     first_name      = models.CharField(_('first name'), max_length=30, blank=True)
     last_name       = models.CharField(_('last name'), max_length=30, blank=True)
@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
     
     def __str__(self):
-        return self.first_name +" "+self.last_name
+        return self.email
 
     def get_full_name(self):
         '''
@@ -91,6 +91,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         for i in self.groups():
             groups += i+', '
         return groups
+
+class Student(models.Model):
+    user = models.OneToOneField('User',on_delete=models.CASCADE, primary_key=True,)
+    registration_no = models.CharField(max_length=20,blank=True,null=True)
+    semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)])
+
+    def __str__(self):
+        return self.registration_no
+    
 
 class Department(models.Model):
     name    = models.CharField(max_length = 50,blank=False,null=False)
@@ -126,9 +135,9 @@ class Material(models.Model):
     author         = models.ForeignKey('User')
     description    = models.CharField(max_length=10,blank=True,null=True)
 
-class ExamPapes(models.Model):
+class ExamPapers(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='ExamPapes/')        
+    files          = models.FileField(upload_to='ExamPapers/')        
     term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
     author         = models.ForeignKey('User')   
 
