@@ -115,4 +115,31 @@ class Course(models.Model):
     
     def __str__(self):
         return self.name
-        
+
+class Announcements(models.Model):
+    course         = models.ForeignKey('Course')
+    description    = models.TextField()
+    updated_on     = models.DateTimeField(auto_now=True)
+    added_on       = models.DateTimeField(auto_now_add=True)
+    files          = models.FileField(upload_to='Announcements/')
+    title          = models.CharField(max_length=100,blank=True,null=True,unique=True)
+    author         =  models.ForeignKey('User')
+    
+    def __str__(self):
+        return self.title
+
+class Material(models.Model):
+    course         = models.ForeignKey('Course')
+    files          = models.FileField(upload_to='Material/')        
+    added_on       = models.DateTimeField(auto_now_add=True)
+    author         = models.ForeignKey('User')
+    description    = models.CharField(max_length=10,blank=True,null=True)
+
+class ExamPapers(models.Model):
+    course         = models.ForeignKey('Course')
+    files          = models.FileField(upload_to='ExamPapers/')        
+    term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
+    author         = models.ForeignKey('User')   
+
+    
+     
