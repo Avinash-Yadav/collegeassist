@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return groups
 
 class Student(models.Model):
-    user = models.OnetoOneField('User')
+    user = models.OneToOneField('User',on_delete=models.CASCADE, primary_key=True,)
     registration_no = models.CharField(max_length=20,blank=True,null=True)
     semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)])
 

@@ -23,5 +23,5 @@ admin.site.register(User,UserAdmin)
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ('registration_no','semester','user')
-    list_display_links = ('registration_no')
+    list_display_links = ('registration_no',)
 admin.site.register(Student,StudentAdmin)
