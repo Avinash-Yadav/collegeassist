@@ -20,7 +20,7 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.CharField(label="Email", required=True)
     password = forms.CharField(label="Password", required=True, widget=forms.PasswordInput)
-    remember = forms.BooleanField(label="Remember Me?")
+    remember = forms.BooleanField(label="Remember Me?",required=False)
     helper = FormHelper()
     helper.form_method = 'POST'
     helper.form_action   = 'login'
@@ -38,7 +38,7 @@ class LoginForm(forms.Form):
 class AnnouncementForm(forms.Form):
     title       = forms.CharField(label="Title", required=True, widget=forms.TextInput)
     description = forms.CharField(label="Description", required=True, widget=forms.Textarea)
-    files       = forms.FileField(label="Files",widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    files       = forms.FileField(label="Files",widget=forms.ClearableFileInput(attrs={'multiple': True}),required=False)
     helper = FormHelper()
     helper.form_method = 'POST'
     # helper.form_action   = 'login'
