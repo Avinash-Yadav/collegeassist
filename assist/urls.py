@@ -6,4 +6,6 @@ urlpatterns = [
     url(r'logout',views._logout,name="logout"),
     url(r'register',views._register,name="register"),
     url(r'profile',views.profile,name="profile"),
+    url(r'services/getdepartments.json$',views.getDepartments,name="getdepartments"),
+    url(r'services/(?P<department>\w+)/getcourses.json$',views.getCourses,name="getcourses"),
 ]

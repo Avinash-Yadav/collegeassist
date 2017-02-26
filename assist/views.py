@@ -1,7 +1,11 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login , logout
-
+from .models import Course,Department,User,Student,ExamPapers,Material,Announcements
 from .forms import RegisterForm , LoginForm
+from django.core import serializers
+from django.contrib.auth.decorators import login_required
+import json 
+from django.http import JsonResponse,HttpResponse
 # Create your views here.
 def home(request):
     print(request.user)
@@ -40,4 +44,21 @@ def profile(request):
         pass
     elif request.method =='POST':
         pass
+
+def getDepartments(request):
+    if request.method =='GET':
+        dept = serializers.serialize("json",Department.objects.all(),use_natural_foreign_keys=True)
+        data = json.loads(dept)
+        result = {"result":data}
+        return HttpResponse(json.dumps(result),content_type='application/json')
+
+
+def getCourses(request,department=None):
+    if request.method =='GET':
+        dept   = get_object_or_404(Department,acronym=department)
+        course = serializers.serialize("json",Course.objects.filter(dept=dept),use_natural_foreign_keys=True)
+        data = json.loads(course)
+        result = {"result":data}
+        return HttpResponse(json.dumps(result),content_type='application/json')
+        
 
