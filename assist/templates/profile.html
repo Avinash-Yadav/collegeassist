@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 {% block title %}COLLEGE ASSIST{% endblock %}
 <!-- priv -->
 {% block head %}
@@ -8,7 +7,5 @@
 <!-- Optional theme -->
 {%  endblock %}
 {% block content %}
-{% crispy form form.helper %}
-<small>Are you new user ? </small><a href={% url "register" %}>Register here</a>
-
+    <h1>{{ user }}</h1>
 {% endblock %}

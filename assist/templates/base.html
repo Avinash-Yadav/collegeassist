@@ -146,7 +146,7 @@
 					// Add the <option> element to the <datalist>.
                     input.appendChild(option);
                     var link   = document.createElement('a');
-                    link.setAttribute("href","#");
+                    link.setAttribute("href","/department/"+item.fields.acronym);
                     link.innerHTML = item.fields.acronym;
                     option.appendChild(link);
                 });

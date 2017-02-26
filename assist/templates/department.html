@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}COLLEGE ASSIST : Departments{% endblock %}
+<!-- priv -->
+{% block head %}
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+{%  endblock %}
+{% block content %}
+<h2>{{ department.name }}</h2>
+<table class="table">
+    <tr><th>Course Name</th><th>Course Code</th><th>Semester</th></tr>
+        {% for course in courses %}
+<tr><td><a href={% url "course" department.acronym course.course.code %}>{{ course.course.name }}</a></td><td>{{ course.course.code }}</td><td>{{ course.semester }}</td></tr>
+        {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}COLLEGE ASSIST : Departments{% endblock %}
+<!-- priv -->
+{% block head %}
+<style>
+    #exTab1 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+    }
+
+    #exTab2 h3 {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+    }
+
+    /* remove border radius for the tab */
+
+    #exTab1 .nav-pills > li > a {
+    border-radius: 0;
+    }
+
+    /* change border radius for the tab , apply corners on top*/
+
+    #exTab3 .nav-pills > li > a {
+    border-radius: 4px 4px 0 0 ;
+    }
+
+    #exTab3 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+    }
+</style>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+{%  endblock %}
+{% block content %}
+<div class="container"><h2>{{ department.name }} - <small>{{ course.name }}</small></h2></div>
+
+<div id="exTab2" class="container">	
+<ul class="nav nav-tabs">
+			<li class="active">
+        <a  href="#1" data-toggle="tab">Announcements</a>
+			</li>
+			<li><a href="#2" data-toggle="tab">Material</a>
+			</li>
+			<li><a href="#3" data-toggle="tab">Exam Papers</a>
+			</li>
+		</ul>
+
+			<div class="tab-content ">
+			  <div class="tab-pane active" id="1">
+                  <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "announcements" department.acronym course.code %}><button class="btn-btn-primary">Announce</button></a></div></div>
+                  <ul>
+                      {% for announce in announcements %}
+                      <li>{{ announce.title }} <br><small>{{ announce.description }}</small> <a href=/{{ MEDIA_URL }}{{ announce.files }}>{{ announce.files }}</a></li>
+                        {% endfor %}
+                  </ul>
+				</div>
+				<div class="tab-pane" id="2">
+                    <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "material" department.acronym course.code %}><button class="btn-btn-primary">Add</button></a></div></div>
+                    <ul>
+                      {% for material in materials %}
+                      <li>{{ material.title }} <br><a href={{ MEDIA_URL }}{{ material.files }}>{{ material.files }}</a></li>
+                        {% endfor %}
+                  </ul>
+				</div>
+                <div class="tab-pane" id="3">
+                    <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "exampaper" department.acronym course.code %}><button class="btn-btn-primary">Add</button></a></div></div>
+                    <ul>
+                      {% for paper in papers %}
+                      <li>{{ paper.term }}<br> <a href={{ MEDIA_URL }}{{ paper.files }}>{{ paper.files }}</a></li>
+                        {% endfor %}
+                  </ul>
+				</div>
+			</div>
+  </div>
+{% endblock %}
