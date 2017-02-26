@@ -116,13 +116,13 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     course         = models.ForeignKey('Course')
-    description    = models.TextField()
+    title          = models.CharField(max_length=100,blank=True,null=True,unique=True)
+    description    = models.TextField()    
+    files          = models.FileField(upload_to='Announcements/')
     updated_on     = models.DateTimeField(auto_now=True)
     added_on       = models.DateTimeField(auto_now_add=True)
-    files          = models.FileField(upload_to='Announcements/')
-    title          = models.CharField(max_length=100,blank=True,null=True,unique=True)
     author         =  models.ForeignKey('User')
     
     def __str__(self):
@@ -133,11 +133,12 @@ class Material(models.Model):
     files          = models.FileField(upload_to='Material/')        
     added_on       = models.DateTimeField(auto_now_add=True)
     author         = models.ForeignKey('User')
-    description    = models.CharField(max_length=10,blank=True,null=True)
+    title          = models.CharField(max_length=100,blank=True,null=True)
 
-class ExamPapers(models.Model):
+class ExamPaper(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='ExamPapers/')        
+    files          = models.FileField(upload_to='ExamPapers/')    
+    added_on       = models.DateTimeField(auto_now_add=True)    
     term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
     author         = models.ForeignKey('User')   
 
