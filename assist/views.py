@@ -35,7 +35,7 @@ def _login(request):
 def _register(request):
     if request.method =='GET':
         form = RegisterForm()
-        return render(request,"register.html",context={"form":form})
+        return render(request,"register.html",context={"form":form})  
     elif request.method == 'POST':
         pass
 
