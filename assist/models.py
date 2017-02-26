@@ -122,7 +122,7 @@ class CourseAllotment(models.Model):
 
 class Announcement(models.Model):
     course         = models.ForeignKey('Course')
-    title          = models.CharField(max_length=100,blank=True,null=True,unique=True)
+    title          = models.CharField(max_length=100,blank=True,null=True)
     description    = models.TextField()    
     files          = models.FileField(upload_to='Announcements/')
     updated_on     = models.DateTimeField(auto_now=True)

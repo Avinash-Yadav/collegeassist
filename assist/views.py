@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login , logout
-from .models import Course, Department, User, Student, ExamPaper, Material, Announcement
+from .models import Course, Department, User, Student, ExamPaper, Material, Announcement, CourseAllotment
 from .forms import RegisterForm , LoginForm , AnnouncementForm , MaterialForm , ExamPaperForm
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm , LoginForm
@@ -77,9 +77,9 @@ def Announcements(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("home")
+            return redirect("course")
         print(form.errors) 
-        return redirect("home") 
+        return redirect("course") 
 
 @login_required
 def Materials(request,coursecode=None):
@@ -95,12 +95,12 @@ def Materials(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("home")
+            return redirect("course")
         print(form.errors)
-        return redirect("home") 
+        return redirect("course") 
 
 @login_required
-def ExamPapers(request,coursecode=None):
+def ExamPaperView(request,coursecode=None):
     if request.method =='GET':
         form= ExamPaperForm()
         return render(request,"ExamPaper.html",context={"form":form})
@@ -113,16 +113,41 @@ def ExamPapers(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("home")
+            return redirect("course")
         print(form.errors) 
-        return redirect("home")
+        return redirect("course")
 
 @login_required
 def DepartmentView(request,department=None):
     if request.method =='GET':
         dept    = get_object_or_404(Department,acronym=department)
-        courses = Course.objects.filter(dept=dept)
-        return render(request,"department.html",context={"department":dept,"courses":courses})
+        # courses = Course.objects.filter(dept=dept)
+        # courseallotment = CourseAllotment.objects.filter(course__in=courses)
+        # li_courses =[]
+        # for course in courses:
+        #     dict_courses =dict()
+        #     dict_courses["name"]     = course.name
+        #     dict_courses["code"]     = course.code
+        #     try:
+        #         dict_courses["semester"] = CourseAllotment.objects.get(course=course).semester
+        #     except:
+        #         dict_courses["semester"] = 0
+        #     dict_courses["year"]     = (dict_courses["semester"]+1)//2
+        #     li_courses.append(dict_courses)
+
+        course = CourseAllotment.objects.select_related('course').filter(course__dept=dept).order_by('semester')
+        print(course)
+        return render(request,"department.html",context={"department":dept,"courses":course})
+
+@login_required
+def CourseView(request,department=None,coursecode=None):
+    if request.method =='GET':
+        dept    = get_object_or_404(Department,acronym=department)
+        course    = get_object_or_404(Course,code=coursecode)
+        announcements = Announcement.objects.filter(course=course)
+        materials     = Material.objects.filter(course=course)
+        papers        = ExamPaper.objects.filter(course=course)
+        return render(request,"course.html",context={"department":dept,"course":course,"announcements":announcements,"materials":materials,"papers":papers})
         
 
 

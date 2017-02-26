@@ -9,9 +9,10 @@
 {%  endblock %}
 {% block content %}
 <h2>{{ department.name }}</h2>
-<ol>
+<table class="table">
+    <tr><th>Course Name</th><th>Course Code</th><th>Semester</th></tr>
         {% for course in courses %}
-        <li>{{ course.name }} -  {{ course.code }}</li>
+<tr><td><a href={% url "course" department.acronym course.course.code %}>{{ course.course.name }}</a></td><td>{{ course.course.code }}</td><td>{{ course.semester }}</td></tr>
         {% endfor %}
-</ol>
+</table>
 {% endblock %}
