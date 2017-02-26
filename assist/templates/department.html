@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}COLLEGE ASSIST{% endblock %}
+{% block title %}COLLEGE ASSIST : Departments{% endblock %}
 <!-- priv -->
 {% block head %}
     <!-- Latest compiled and minified CSS -->
@@ -8,7 +8,10 @@
 <!-- Optional theme -->
 {%  endblock %}
 {% block content %}
-{% crispy form form.helper %}
-<small>Are you new user ? </small><a href={% url "register" %}>Register here</a>
-
+<h2>{{ department.name }}</h2>
+<ol>
+        {% for course in courses %}
+        <li>{{ course.name }} -  {{ course.code }}</li>
+        {% endfor %}
+</ol>
 {% endblock %}

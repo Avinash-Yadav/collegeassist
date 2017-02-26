@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'(?P<coursecode>\w+)/exampaper$',views.ExamPapers,name="exampaper"),
     url(r'services/getdepartments.json$',views.getDepartments,name="getdepartments"),
     url(r'services/(?P<department>\w+)/getcourses.json$',views.getCourses,name="getcourses"),
+    url(r'department/(?P<department>\w+)/',views.DepartmentView,name="department")
 ]
  

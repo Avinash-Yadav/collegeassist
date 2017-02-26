@@ -116,6 +116,10 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+class CourseAllotment(models.Model):
+    course  = models.OneToOneField('Course')
+    semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)])
+
 class Announcement(models.Model):
     course         = models.ForeignKey('Course')
     title          = models.CharField(max_length=100,blank=True,null=True,unique=True)

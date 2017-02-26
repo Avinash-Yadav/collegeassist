@@ -117,5 +117,13 @@ def ExamPapers(request,coursecode=None):
         print(form.errors) 
         return redirect("home")
 
+@login_required
+def DepartmentView(request,department=None):
+    if request.method =='GET':
+        dept    = get_object_or_404(Department,acronym=department)
+        courses = Course.objects.filter(dept=dept)
+        return render(request,"department.html",context={"department":dept,"courses":courses})
+        
+
 
 
