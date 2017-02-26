@@ -124,7 +124,11 @@ USE_L10N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'assist.User'
-
+ 
+LOGIN_EXEMPT_URLS = (
+ r'^about\.html$',
+ r'^services/', # allow any URL under /legal/*
+) 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
