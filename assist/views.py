@@ -7,6 +7,7 @@ from .forms import RegisterForm , LoginForm
 from django.core import serializers
 import json 
 from django.http import JsonResponse,HttpResponse
+from django.urls import reverse
 # Create your views here.
 def home(request):
     print(request.user)
@@ -63,7 +64,7 @@ def getCourses(request,department=None):
         return HttpResponse(json.dumps(result),content_type='application/json')
 
 @login_required
-def Announcements(request,coursecode=None):
+def Announcements(request,department=None,coursecode=None):
     if request.method =='GET':
         form= AnnouncementForm()
         return render(request,"announcements.html",context={"form":form})
@@ -77,12 +78,12 @@ def Announcements(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("course")
+            return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
         print(form.errors) 
-        return redirect("course") 
+        return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
 
 @login_required
-def Materials(request,coursecode=None):
+def Materials(request,department=None,coursecode=None):
     if request.method =='GET':
         form= MaterialForm()
         return render(request,"material.html",context={"form":form})
@@ -95,12 +96,12 @@ def Materials(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("course")
-        print(form.errors)
-        return redirect("course") 
+            return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
+        print(form.errors) 
+        return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
 
 @login_required
-def ExamPaperView(request,coursecode=None):
+def ExamPaperView(request,department=None,coursecode=None):
     if request.method =='GET':
         form= ExamPaperForm()
         return render(request,"ExamPaper.html",context={"form":form})
@@ -113,9 +114,9 @@ def ExamPaperView(request,coursecode=None):
             obj.author=request.user
             obj.course= Course.objects.get(code=coursecode)
             obj.save()
-            return redirect("course")
+            return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
         print(form.errors) 
-        return redirect("course")
+        return redirect(reverse("course", kwargs={'department':department,'coursecode':coursecode}))
 
 @login_required
 def DepartmentView(request,department=None):

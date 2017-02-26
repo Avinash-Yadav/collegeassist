@@ -20,4 +20,4 @@ from . import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^',include('assist.urls')),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
