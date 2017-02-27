@@ -34,12 +34,21 @@ def _login(request):
         return redirect('home')
         
 
-def _register(request):
+def _register(request,register_as=None):
     if request.method =='GET':
         form = RegisterForm()
         return render(request,"register.html",context={"form":form})  
     elif request.method == 'POST':
-        pass
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            if(register_as=='student'):
+                form.user_role = 'student'
+            elif(register_as=='instructor'):
+                form.user_role = 'instructor'
+            form.save()
+            return redirect(reverse('login'))
+        return redirect(reverse('register',kwargs={"register_as":register_as}))
+            
 
 def profile(request):
     if request.method == 'GET':
