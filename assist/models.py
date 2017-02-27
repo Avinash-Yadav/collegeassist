@@ -46,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active       = models.BooleanField(_('active'), default=True)
     is_admin 		= models.BooleanField(default=False)
     avatar          = models.ImageField(upload_to='static/avatars/', null=True, blank=True)
-    user_role	    = models.CharField(max_length=8,choices=(('student','student'),('instructor','instructor'),('super','super')),default='student')
+    user_role	    = models.CharField(max_length=10,choices=(('student','student'),('instructor','instructor'),('super','super')),default='student')
 
     objects = UserManager()
 

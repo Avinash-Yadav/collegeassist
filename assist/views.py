@@ -41,11 +41,12 @@ def _register(request,register_as=None):
     elif request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
+            user = form.save()
             if(register_as=='student'):
-                form.user_role = 'student'
+                user.user_role = 'student'
             elif(register_as=='instructor'):
-                form.user_role = 'instructor'
-            form.save()
+                user.user_role = 'instructor'
+            user.save()
             return redirect(reverse('login'))
         return redirect(reverse('register',kwargs={"register_as":register_as}))
             
