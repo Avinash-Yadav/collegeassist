@@ -13,6 +13,9 @@
                 min-height: 2000px;
                 padding-top: 70px;
                 }
+            .danger{
+                color:indianred;
+            }
             @media (max-width: 1000px) {
             .navbar-header {
                 float: none;
@@ -55,6 +58,7 @@
         </style>
     {% block head %}
     {% endblock %}
+    
 </head>
 <body>
 <div class="container">
@@ -119,14 +123,9 @@
           
         </div><!--/.nav-collapse -->
       </div>
-    </nav>  
-{% block content %}
-{% endblock %}
-</div>
-<script>
-            // Get the <datalist> and <input> elements.
+    </nav>
+    <script>
             var input = document.getElementById('dept');
-
             // Create a new XMLHttpRequest.
             var request = new XMLHttpRequest();
 
@@ -136,8 +135,6 @@
                 if (request.status === 200) {
                 // Parse the JSON
                 var jsonOptions = JSON.parse(request.responseText);
-                console.log(jsonOptions);
-                                // Loop over the JSON array.
                 jsonOptions["result"].forEach(function(item) {
                     // Create a new <option> element.
                     var option = document.createElement('li');
@@ -151,19 +148,14 @@
                     option.appendChild(link);
                 });
                 
-                // Update the placeholder text.
                 } else {
-                // An error occured :(
-                // input.placeholder = "Couldn't load datalist options :(";
                 }
             }
             };
-
-            // Update the placeholder text.
-            // input.placeholder = "Loading options...";
-
-            // Set up and make the request.
             request.open('GET', '/services/getdepartments.json', true);
             request.send();
-            </script>
+    </script>  
+{% block content %}
+{% endblock %}
+</div>
 </body>

@@ -34,16 +34,28 @@ def _login(request):
         return redirect('home')
         
 
-def _register(request):
+def _register(request,register_as=None):
     if request.method =='GET':
         form = RegisterForm()
         return render(request,"register.html",context={"form":form})  
     elif request.method == 'POST':
-        pass
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if(register_as=='student'):
+                user.user_role = 'student'
+            elif(register_as=='instructor'):
+                user.user_role = 'instructor'
+            user.save()
+            return redirect(reverse('login'))
+        return redirect(reverse('register',kwargs={"register_as":register_as}))
+            
 
 def profile(request):
     if request.method == 'GET':
-        pass
+        if request.user.user_role == "student":
+            student,created = Student.objects.get_or_create(user=request.user)
+            return render(request,"profile.html",context={"user":request.user,"student":student})
     elif request.method =='POST':
         pass
 
@@ -67,7 +79,7 @@ def getCourses(request,department=None):
 def Announcements(request,department=None,coursecode=None):
     if request.method =='GET':
         form= AnnouncementForm()
-        return render(request,"announcements.html",context={"form":form})
+        return render(request,"form.html",context={"form":form})
     elif request.method =="POST":
         form = AnnouncementForm(request.POST,request.FILES)
         if(form.is_valid()):
@@ -86,7 +98,7 @@ def Announcements(request,department=None,coursecode=None):
 def Materials(request,department=None,coursecode=None):
     if request.method =='GET':
         form= MaterialForm()
-        return render(request,"material.html",context={"form":form})
+        return render(request,"form.html",context={"form":form})
     elif request.method =="POST":
         form = MaterialForm(request.POST,request.FILES)
         if(form.is_valid()):
@@ -104,7 +116,7 @@ def Materials(request,department=None,coursecode=None):
 def ExamPaperView(request,department=None,coursecode=None):
     if request.method =='GET':
         form= ExamPaperForm()
-        return render(request,"ExamPaper.html",context={"form":form})
+        return render(request,"form.html",context={"form":form})
     elif request.method =="POST":
         form = ExamPaperForm(request.POST,request.FILES)
         if(form.is_valid()):
@@ -137,7 +149,6 @@ def DepartmentView(request,department=None):
         #     li_courses.append(dict_courses)
 
         course = CourseAllotment.objects.select_related('course').filter(course__dept=dept).order_by('semester')
-        print(course)
         return render(request,"department.html",context={"department":dept,"courses":course})
 
 @login_required

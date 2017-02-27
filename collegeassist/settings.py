@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media', #For using MEDIA_URL in template
             ],
         },
     },
@@ -134,8 +135,8 @@ LOGIN_EXEMPT_URLS = (
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = '/'
-MEDIA_URL  = os.path.join(BASE_DIR,'/')
+MEDIA_ROOT = 'uploads/'
+MEDIA_URL  = '/'
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static/'),
   os.path.join(BASE_DIR,'/'),

@@ -46,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active       = models.BooleanField(_('active'), default=True)
     is_admin 		= models.BooleanField(default=False)
     avatar          = models.ImageField(upload_to='static/avatars/', null=True, blank=True)
-    user_role	    = models.CharField(max_length=8,choices=(('student','student'),('instructor','instructor'),('super','super')),default='student')
+    user_role	    = models.CharField(max_length=10,choices=(('student','student'),('instructor','instructor'),('super','super')),default='student')
 
     objects = UserManager()
 
@@ -95,7 +95,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Student(models.Model):
     user = models.OneToOneField('User',on_delete=models.CASCADE, primary_key=True,)
     registration_no = models.CharField(max_length=20,blank=True,null=True)
-    semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)])
+    semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)],blank=True,null=True)
 
     def __str__(self):
         return self.registration_no
@@ -124,7 +124,7 @@ class Announcement(models.Model):
     course         = models.ForeignKey('Course')
     title          = models.CharField(max_length=100,blank=True,null=True)
     description    = models.TextField()    
-    files          = models.FileField(upload_to='Announcements/')
+    files          = models.FileField(upload_to='')
     updated_on     = models.DateTimeField(auto_now=True)
     added_on       = models.DateTimeField(auto_now_add=True)
     author         =  models.ForeignKey('User')
@@ -134,14 +134,14 @@ class Announcement(models.Model):
 
 class Material(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='Material/')        
+    files          = models.FileField(upload_to='')        
     added_on       = models.DateTimeField(auto_now_add=True)
     author         = models.ForeignKey('User')
     title          = models.CharField(max_length=100,blank=True,null=True)
 
 class ExamPaper(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='ExamPapers/')    
+    files          = models.FileField(upload_to='')    
     added_on       = models.DateTimeField(auto_now_add=True)    
     term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
     author         = models.ForeignKey('User')   

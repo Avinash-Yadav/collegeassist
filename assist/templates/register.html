@@ -9,5 +9,6 @@
 {%  endblock %}
 {% block content %}
 {% crispy form form.helper %}
+<small>Already registered ? </small><a href={% url "login"  %}>Login here</a>
 
 {% endblock %}
