@@ -124,7 +124,7 @@ class Announcement(models.Model):
     course         = models.ForeignKey('Course')
     title          = models.CharField(max_length=100,blank=True,null=True)
     description    = models.TextField()    
-    files          = models.FileField(upload_to='Announcements/')
+    files          = models.FileField(upload_to='')
     updated_on     = models.DateTimeField(auto_now=True)
     added_on       = models.DateTimeField(auto_now_add=True)
     author         =  models.ForeignKey('User')
@@ -134,14 +134,14 @@ class Announcement(models.Model):
 
 class Material(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='Material/')        
+    files          = models.FileField(upload_to='')        
     added_on       = models.DateTimeField(auto_now_add=True)
     author         = models.ForeignKey('User')
     title          = models.CharField(max_length=100,blank=True,null=True)
 
 class ExamPaper(models.Model):
     course         = models.ForeignKey('Course')
-    files          = models.FileField(upload_to='ExamPapers/')    
+    files          = models.FileField(upload_to='')    
     added_on       = models.DateTimeField(auto_now_add=True)    
     term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
     author         = models.ForeignKey('User')   

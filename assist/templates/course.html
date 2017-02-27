@@ -57,7 +57,7 @@
                   <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "announcements" department.acronym course.code %}><button class="btn-btn-primary">Announce</button></a></div></div>
                   <ul>
                       {% for announce in announcements %}
-                      <li>{{ announce.title }} <br><small>{{ announce.description }}</small> <a href=/{{ MEDIA_URL }}{{ announce.files }}>{{ announce.files }}</a></li>
+                      <li>{{ announce.title }} <br><small>{{ announce.description }}</small> <a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></li>
                         {% endfor %}
                   </ul>
 				</div>
@@ -65,7 +65,7 @@
                     <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "material" department.acronym course.code %}><button class="btn-btn-primary">Add</button></a></div></div>
                     <ul>
                       {% for material in materials %}
-                      <li>{{ material.title }} <br><a href={{ MEDIA_URL }}{{ material.files }}>{{ material.files }}</a></li>
+                      <li>{{ material.title }} <br><a href={{ MEDIA_URL }}{{ material.files }} target="_blank">{{ material.files }}</a></li>
                         {% endfor %}
                   </ul>
 				</div>
@@ -73,7 +73,7 @@
                     <div class="row" style="margin-top:10px;"><div class="col-md-2 pull-right"><a href={% url "exampaper" department.acronym course.code %}><button class="btn-btn-primary">Add</button></a></div></div>
                     <ul>
                       {% for paper in papers %}
-                      <li>{{ paper.term }}<br> <a href={{ MEDIA_URL }}{{ paper.files }}>{{ paper.files }}</a></li>
+                      <li>{{ paper.term }}<br> <a href={{ MEDIA_URL }}{{ paper.files }} target="_blank">{{ paper.files }}</a></li>
                         {% endfor %}
                   </ul>
 				</div>
