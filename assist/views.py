@@ -53,7 +53,9 @@ def _register(request,register_as=None):
 
 def profile(request):
     if request.method == 'GET':
-        pass
+        if request.user.user_role == "student":
+            student,created = Student.objects.get_or_create(user=request.user)
+            return render(request,"profile.html",context={"user":request.user,"student":student})
     elif request.method =='POST':
         pass
 
