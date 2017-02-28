@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 urlpatterns = [
     url(r'^$', views.home,name="home"),
+    url(r'about', views.about,name="about"),
     url(r'login',views._login,name="login"),
     url(r'logout',views._logout,name="logout"),
     url(r'register/(?P<register_as>\w+)',views._register,name="register"),
@@ -13,6 +14,7 @@ urlpatterns = [
     url(r'services/(?P<department>\w+)/getcourses.json$',views.getCourses,name="getcourses"),
     url(r'department/(?P<department>\w+)',views.DepartmentView,name="department"),
     url(r'(?P<department>\w+)/(?P<coursecode>\w+)',views.CourseView,name="course"),
+
     
 ]
  

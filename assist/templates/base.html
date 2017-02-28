@@ -89,7 +89,7 @@
             </li>
             {% else %}
             {% endif %}
-            <li><a href="#contact">About</a></li>
+            <li><a href={% url "about" %}>About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if not user.is_authenticated %}
