@@ -13,6 +13,9 @@ def home(request):
     print(request.user)
     return render(request,"index.html",context={'':""})
 
+def about(request):
+    return render(request,"about.html",context={'':""})
+
 def _logout(request):
     logout(request)
     return redirect('home')
