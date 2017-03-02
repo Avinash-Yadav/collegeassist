@@ -60,7 +60,8 @@ def profile(request):
             student,created = Student.objects.get_or_create(user=request.user)
             return render(request,"profile.html",context={"user":request.user,"student":student})
     elif request.method =='POST':
-        pass
+        pass 
+        # Profile edit to be implemented.
 
 def getDepartments(request):
     if request.method =='GET':
