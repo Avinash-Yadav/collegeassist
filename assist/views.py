@@ -61,7 +61,8 @@ def profile(request):
             student,created = Student.objects.get_or_create(user=request.user)
             return render(request,"profile.html",context={"user":request.user,"student":student})
     elif request.method =='POST':
-        pass
+        pass 
+        # Profile edit to be implemented.
 
 def getDepartments(request):
     if request.method =='GET':
@@ -172,10 +173,10 @@ def CourseView(request,department=None,coursecode=None):
         
 @login_required
 def FeedView(request):
-    if request.method =='GET':
-        present_time = datetime.datetime.now()
-        feed = Announcement.objects.filter(updated_on__gt=present_time-datetime.timedelta(days=4)).order_by('updated_on')
-        return render(request,"feed.html",context={"feed":feed})
+    if request.method=='GET':
+        start_from = int(request.GET.get('start_from',0))
+        announcements = Announcement.objects.select_related('author').all().order_by('-updated_on')[start_from*3:start_from*3+3]
+        return render(request,"feed.html",context={"feed":announcements,"next":start_from+1})
 
 @login_required
 def BookmarkView(request):
