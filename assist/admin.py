@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Department, User, Student, ExamPaper, Material, Announcement, CourseAllotment
+from .models import Course, Department, User, Student, ExamPaper, Material, Announcement, CourseAllotment,Bookmark
 admin.site.empty_value_display = '(None)'
 # Register your models here.
 class CourseAdmin(admin.ModelAdmin):
@@ -45,3 +45,8 @@ class CourseAllotmentAdmin(admin.ModelAdmin):
     list_display = ('course','semester' )
     list_display_links = ('course',)
 admin.site.register(CourseAllotment,CourseAllotmentAdmin)
+
+class BookmarksAdmin(admin.ModelAdmin):
+    list_display = ('course','user' )
+    list_display_links = ('course',)
+admin.site.register(Bookmark,BookmarksAdmin)

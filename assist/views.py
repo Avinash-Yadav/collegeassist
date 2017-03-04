@@ -1,13 +1,14 @@
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login , logout
-from .models import Course, Department, User, Student, ExamPaper, Material, Announcement, CourseAllotment
+from .models import Course, Department, User, Student, ExamPaper, Material, Announcement, CourseAllotment, Bookmark
 from .forms import RegisterForm , LoginForm , AnnouncementForm , MaterialForm , ExamPaperForm
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm , LoginForm
 from django.core import serializers
-import json 
 from django.http import JsonResponse,HttpResponse
 from django.urls import reverse
+import datetime
+import json
 # Create your views here.
 def home(request):
     print(request.user)
@@ -157,13 +158,42 @@ def DepartmentView(request,department=None):
 @login_required
 def CourseView(request,department=None,coursecode=None):
     if request.method =='GET':
-        dept    = get_object_or_404(Department,acronym=department)
-        course    = get_object_or_404(Course,code=coursecode)
+        dept          = get_object_or_404(Department,acronym=department)
+        course        = get_object_or_404(Course,code=coursecode)
         announcements = Announcement.objects.filter(course=course)
         materials     = Material.objects.filter(course=course)
         papers        = ExamPaper.objects.filter(course=course)
-        return render(request,"course.html",context={"department":dept,"course":course,"announcements":announcements,"materials":materials,"papers":papers})
+        try:
+            bookmark  = Bookmark.objects.get(course=course,user=request.user)
+        except:
+            bookmark  = None
+        is_bookmarked = True if bookmark else False   
+        return render(request,"course.html",context={"department":dept,"course":course,"announcements":announcements,"materials":materials,"papers":papers,"is_bookmarked":is_bookmarked})
         
+@login_required
+def FeedView(request):
+    if request.method =='GET':
+        present_time = datetime.datetime.now()
+        feed = Announcement.objects.filter(updated_on__gt=present_time-datetime.timedelta(days=4)).order_by('updated_on')
+        return render(request,"feed.html",context={"feed":feed})
 
-
+@login_required
+def BookmarkView(request):
+    if request.method =='POST':
+        course     = request.POST.get('course')
+        user       = request.POST.get('user')
+        course_obj = get_object_or_404(Course,id=course)
+        try:
+            bookmark  = Bookmark.objects.get(course=course,user=request.user)
+        except:
+            bookmark  = None
+        if bookmark is not None:
+            print("It was working")
+            bookmark.delete()
+        else:
+            obj        = Bookmark()
+            obj.course = course_obj
+            obj.user   = request.user
+            obj.save()
+        return HttpResponse(json.dumps({"success":True}),content_type='application/json')
 
