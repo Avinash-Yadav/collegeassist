@@ -12,7 +12,15 @@ import json
 # Create your views here.
 def home(request):
     print(request.user)
-    return render(request,"index.html",context={'':""})
+    bookmarks  =Bookmark.objects.filter(user=request.user)
+    bookmarkcourses = Bookmark.objects.select_related('course').filter(user=request.user)
+    courselist=[]
+    for bookmark in bookmarks:
+        courselist.append(bookmark.course)
+    start_from = int(request.GET.get('start_from',0))
+    announcements = Announcement.objects.select_related('author').filter(course__in=courselist).order_by('-updated_on')[start_from*3:start_from*3+3]
+    print(bookmarkcourses[0].course.name)
+    return render(request,"feed.html",context={"feed":announcements,"next":start_from+1,"bookmark":bookmarkcourses})
 
 def about(request):
     return render(request,"about.html",context={'':""})
