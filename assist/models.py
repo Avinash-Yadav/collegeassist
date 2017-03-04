@@ -146,5 +146,9 @@ class ExamPaper(models.Model):
     term           = models.CharField(max_length=10,blank=False,null=False,choices=(('M','mid-term'),('E','end-term')))
     author         = models.ForeignKey('User')   
 
+class Bookmark(models.Model):
+    course         = models.ForeignKey('Course')
+    user          = models.ForeignKey('User')   
+
     
      
