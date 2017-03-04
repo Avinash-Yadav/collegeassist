@@ -165,6 +165,11 @@ def CourseView(request,department=None,coursecode=None):
         papers        = ExamPaper.objects.filter(course=course)
         return render(request,"course.html",context={"department":dept,"course":course,"announcements":announcements,"materials":materials,"papers":papers})
         
-
+@login_required
+def FeedView(request):
+    if request.method=='GET':
+        start_from = int(request.GET.get('start_from',0))
+        announcements = Announcement.objects.select_related('author').all().order_by('-updated_on')[start_from*3:start_from*3+3]
+        return render(request,"feed.html",context={"feed":announcements,"next":start_from+1})
 
 

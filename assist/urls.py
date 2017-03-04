@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'logout',views._logout,name="logout"),
     url(r'register/(?P<register_as>\w+)',views._register,name="register"),
     url(r'profile',views.profile,name="profile"),
+    url(r'feed',views.FeedView,name="feed"),
     url(r'(?P<department>\w+)/(?P<coursecode>\w+)/announcements$',views.Announcements,name="announcements"),
     url(r'(?P<department>\w+)/(?P<coursecode>\w+)/material$',views.Materials,name="material"),
     url(r'(?P<department>\w+)/(?P<coursecode>\w+)/exampaper$',views.ExamPaperView,name="exampaper"),

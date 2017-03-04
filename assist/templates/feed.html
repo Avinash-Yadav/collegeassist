@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}COLLEGE ASSIST{% endblock %}
+<!-- priv -->
+{% block head %}
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+<style>
+    .vertical{
+        display: flex;
+        flex-flow: column;
+        justify-content: space-around;
+        align-items:center;
+    }
+    .feed-container{
+        
+        border-top-left-radius: 2em;
+        border-top-right-radius: 2em;
+        background: #E8E8E8  ;
+    }
+    .feed-container > div{
+        padding: 0% 2% 0% 2%;
+        align-items:center;
+    }
+    .feed-title{
+        position:relative;
+        border-top-left-radius: 2em;
+        border-top-right-radius: 2em;
+        text-align: center;
+        align-content: center;
+        background: 	#A8A8A8 ;
+    }
+    .author{
+        display: flex;
+        vertical-align: middle;
+        margin-top:0.5em;
+        margin-bottom: 0.5em;
+        /*justify-content: space-between;*/
+    }
+    hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+} 
+</style>
+{%  endblock %}
+{% block content %}
+<div class="container-fluid vertical">
+    <div class="col-md-6">
+    {% for announce in feed %}
+        <div class="container-fluid feed-container">
+            <div class="row feed-title"><h3>{{ announce.title }}</h3></div>
+            <div class="row author"><div class="col-md-2 pull-left"><img class="img-responsive img-circle" src="https://yt3.ggpht.com/-Dqf3p5-NRus/AAAAAAAAAAI/AAAAAAAAAAA/OzD-6jB9ViM/s900-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="No user image"/></div><div class=" col-md-4 pull-left"><p class="text-primary">{{ announce.author.get_full_name }}</p></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
+            <hr>
+            <div class="row content"><p>{{ announce.description }}</p></div>
+            <div class="row"><strong>Attachments : </strong><a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></div>
+        </div>
+    <br>
+    {% endfor %}
+    </div>
+</div>
+<div class="row"><a href="{% url 'feed' %}?start_from={{ next }}">See More</a></div>
+{% endblock %}
