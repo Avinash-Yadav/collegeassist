@@ -48,15 +48,38 @@
     border-width: 1px;
 } 
     #bookmarkedcourses{
-        background: black;
+        position: fixed;
+        margin-top:0px;
+        margin-left: 0px;
+        background: #A8A8A8 ;
         color: white;
-        height: 100%
+        z-index: 1000;
     }
+    #bookmarkedcourses >ul >li >a {
+        color:white;
+        }
+    #bookmarkedcourses >ul >li >a:hover {
+        color:black;
+        font-size: 1.1em;
+        }
+    #bookmarkedcourses > h4{
+        color:whilte;
+    }
+    .author> div >img {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
 </style>
 {%  endblock %}
 {% block content %}
+{% if user.is_authenticated %}
 {% if bookmark %}
-    <div class="col-md-3" id="bookmarkedcourses">
+    <div class="col-md-2 pull-left" id="bookmarkedcourses">
+        <h4>Bookmarked Courses</h4>
+        <hr>
         <ul>
             {% for bookmarkcourse in bookmark %}
             <li>
@@ -67,37 +90,62 @@
             {% endfor %}
         </ul>
     </div>
-    <div class="col-md-9 container-fluid ">
-    <div class="col-md-6">
-    {% for announce in feed %}
-        <div class="container-fluid feed-container">
-            <div class="row feed-title"><h3>{{ announce.title }}</h3></div>
-            <div class="row author"><div class="col-md-2 pull-left"><img class="img-responsive img-circle" src="https://yt3.ggpht.com/-Dqf3p5-NRus/AAAAAAAAAAI/AAAAAAAAAAA/OzD-6jB9ViM/s900-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="No user image"/></div><div class=" col-md-4 pull-left"><p class="text-primary">{{ announce.author.get_full_name }}</p></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
-            <hr>
-            <div class="row content"><p>{{ announce.description }}</p></div>
-            <div class="row"><strong>Attachments : </strong><a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></div>
-        </div>
-    <br>
-    {% endfor %}
-    </div>
-    <div class="row"><div class="pull-left"><a href="{% url 'home' %}?start_from={{ next }}">See More</a></div></div>
+
+    <div class="container-fluid vertical    ">
+        {% if feed %}
+            <div class="col-md-6">
+                {% for announce in feed %}
+                    <div class="container-fluid feed-container">
+                        <div class="row feed-title"><h3>{{ announce.title }}</h3></div>
+                        <div class="row author"><div class="col-md-2 pull-left">{% if announce.author.avatar %}
+                            <img class="img-responsive img-circle" src={{ announce.author.avatar }}>
+                            {% else %}
+                            <img class="img-responsive img-cirlce" src="https://cdn2.iconfinder.com/data/icons/metro-uinvert-dock/256/User_No-Frame.png" alt="No user image"/>
+                            {% endif %}</div><div class=" col-md-4 pull-left"><a href="{% url 'profile' %}?email={{ announce.author.email}}"><p class="text-primary">{{ announce.author.get_full_name }}</p></a></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
+                        <hr>
+                        <div class="row content"><p>{{ announce.description }}</p></div>
+                        <div class="row"><strong>Attachments : </strong><a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></div>
+                    </div>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="row"><div class=" col md-6"><a href="{% url 'home' %}?start_from={{ next }}">See More</a></div></div>
+        {% else %}
+     <h2>No updates.</h2>
+
+        {% endif %}
     </div>
     {% else %}
     <div class="container-fluid vertical">
     <div class="col-md-6">
+    {% if feed %}
     {% for announce in feed %}
         <div class="container-fluid feed-container">
             <div class="row feed-title"><h3>{{ announce.title }}</h3></div>
-            <div class="row author"><div class="col-md-2 pull-left"><img class="img-responsive img-circle" src="https://yt3.ggpht.com/-Dqf3p5-NRus/AAAAAAAAAAI/AAAAAAAAAAA/OzD-6jB9ViM/s900-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="No user image"/></div><div class=" col-md-4 pull-left"><p class="text-primary">{{ announce.author.get_full_name }}</p></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
+            <div class="row author"><div class="col-md-2 pull-left">{% if announce.author.avatar %}
+                <img class="img-responsive img-circle" src={{ announce.author.avatar }}>
+                {% else %}
+                <img class="img-responsive img-cirlce" src="https://cdn2.iconfinder.com/data/icons/metro-uinvert-dock/256/User_No-Frame.png" alt="No user image"/>
+                {% endif %}</div><div class=" col-md-4 pull-left"><a href="{% url 'profile' %}?email={{ announce.author.email}}"><p class="text-primary">{{ announce.author.get_full_name }}</p></a></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
             <hr>
             <div class="row content"><p>{{ announce.description }}</p></div>
             <div class="row"><strong>Attachments : </strong><a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></div>
         </div>
     <br>
     {% endfor %}
+    <div class="row"><div class="col md-6 text-center"><a href="{% url 'feed' %}?start_from={{ next }}">See More</a></div></div>
     </div>
-    <div class="row"><div class="pull-left"><a href="{% url 'feed' %}?start_from={{ next }}">See More</a></div></div>
-</div>
+
+    {% else %}
+     <h2>No updates.</h2>
+    {% endif %}
+    </div>
+
+
+    {% endif %}
+    {% else %}
+    <div class="container text-center">
+    <h2><a href={% url 'login' %}>Login</a> to see new Updates</h2></div>
     {% endif %}
 
 {% endblock %}

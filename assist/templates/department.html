@@ -8,6 +8,7 @@
 <!-- Optional theme -->
 {%  endblock %}
 {% block content %}
+<div class="container">
 <h2>{{ department.name }}</h2>
 <table class="table">
     <tr><th>Course Name</th><th>Course Code</th><th>Semester</th></tr>
@@ -15,4 +16,6 @@
 <tr><td><a href={% url "course" department.acronym course.course.code %}>{{ course.course.name }}</a></td><td>{{ course.course.code }}</td><td>{{ course.semester }}</td></tr>
         {% endfor %}
 </table>
+</div>
+
 {% endblock %}

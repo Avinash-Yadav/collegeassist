@@ -1,25 +1,161 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block title %}COLLEGE ASSIST{% endblock %}
 <!-- priv -->
 {% block head %}
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script type="text/javascript"></script>
 <!-- Optional theme -->
 {%  endblock %}
 {% block content %}
+<div class="container">
+<span id="csrf">{% csrf_token %}</span>
 <div class="row">
     <div class="col-md-8">
 <table class="table">
-    <tr><th colspan="2">Profile Info</th></tr>
-    <tr><td>Name</td><td id="first_name">{{ user.first_name }}</td><td id="last_name"> user.last_name }}</td></tr>
-    <tr><td>Email</td><td colspan="2" id="email">{{ user.email }}</td></tr>
-    <tr><td>Last Login</td><td colspan="2" id="last_login">{{ user.last_login }}</td></tr>
-    <tr><td>Semester</td><td colspan="2" id="semester">{% if student.semester %}{{ student.semester }}{% else %}<span class="danger">Please provide your semester</span>{% endif %}</td></tr>
-    <tr><td>Registration No</td><td colspan="2" id="registration_no">{% if student.registration_no %}{{ student.registration_no }}{% else %}<span class="danger">Please provide your registration no</span>{% endif %}</td></tr>
+    <h3>Profile Info</h3>
+    <tr><td>First Name</td><td colspan="2" id="first_name"><span>{{ user.first_name }}</span></td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    <tr><td>Last Name</td><td colspan="2" id="last_name"><span>{{ user.last_name }}</span></td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    <tr><td>Email</td><td colspan="2" id="email"><span>{{ user.email }}</span></td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    {% if student %}
+    <tr><td>Semester</td><td colspan="2" id="semester">{% if student.semester %}<span>{{ student.semester }}</span>{% else %}<span class="danger">Please provide your semester</span>{% endif %}</td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    <tr><td>Registration No</td><td colspan="2" id="registration_no">{% if student.registration_no %}<span>{{ student.registration_no }}</span>{% else %}<span class="danger">Please provide your registration no</span>{% endif %}</td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    <tr><td>Branch</td><td colspan="2" id="branch">{% if student.branch %}<span>{{ student.branch }}</span>{% else %}<span class="danger">Please provide your branch</span>{% endif %}</td><td class="edit-button"><input class="btn btn-primary" data-toggle="modal" data-target="#modal"type="submit" value="Edit"></td></tr>
+    {% else %}
+    {% endif %}
+    <tr><td>Last Login</td><td colspan="2" id="last_login"><span>{{ user.last_login }}</span></td></tr>
 </table>
+<div id="modal" class="modal fade"><div class="modal-content"><div class="modal-header">
+	<h5 class="modal-title"></h5><button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="modal-body"><div class="container"></div></div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" data-dismiss="modal"  >Cancel</button>
+	<button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-change">Save</button>
+</div>
+</div>
+</div>
+{% if is_owner == False %}
 <script>
-</script>
+	window.onload=function(){
+			var button= document.getElementsByClassName("edit-button");
+			var step;
+			while(button.length>0){
+				button[0].remove();
+			}
+		};
+		</script>
+		{% else %}
+		{% endif %}
+		<script>
+		var button = document.getElementsByClassName("edit-button");
+		var step;
+		for(step=0;step<button.length;step++){
+			button[step].firstChild.addEventListener("click",function(){
+				console.log(this.parentNode.parentNode.firstChild.nextSibling.id);
+				var elemodal = document.getElementsByClassName("modal-title");
+				elemodal[0].innerHTML = "Edit "+this.parentNode.parentNode.firstChild.innerHTML;
+				var label = document.createElement("span");
+				var _label = document.createTextNode(this.parentNode.parentNode.firstChild.innerHTML);
+				label.appendChild(_label);
+				var input = document.createElement("input");
+				input.setAttribute('type','text');
+				input.setAttribute('name',this.parentNode.parentNode.firstChild.nextSibling.id);
+				input.setAttribute('id','modal-input-value');
+				if(!(this.parentNode.parentNode.firstChild.nextSibling.firstChild.className =="danger" && this.parentNode.parentNode.firstChild.nextSibling.firstChild) )
+				input.setAttribute('value',this.parentNode.parentNode.firstChild.nextSibling.firstChild.innerHTML);
+				document.getElementsByClassName("modal-body")[0].firstChild.appendChild(label);
+				document.getElementsByClassName("modal-body")[0].firstChild.appendChild(input);
+				// document.getElementById("modal").modal('show');
+			})
+		}
+		$("#modal").on('hidden.bs.modal',function(e){
+			var modalbody=document.getElementsByClassName("modal-body")[0].firstChild;
+			while(modalbody.firstChild){
+				modalbody.removeChild(modalbody.firstChild);
+			}
+		});
+		document.getElementById("submit-change").addEventListener("click",function(){
+		var input = document.getElementById('modal-input-value');
+        var csrf = document.getElementById("csrf").firstChild.value;
+        var http = new XMLHttpRequest();
+        var url = "{% url 'profile' %}";
+        var params = "value="+input.value+"&name="+input.name;
+        http.open("POST", url, true);
 
-    </div><div class="col-md-4"></div>
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.setRequestHeader("X-CSRFToken", csrf);
+
+
+        http.onreadystatechange = function() {
+            //Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+               location.reload();
+            }
+        }
+        http.send(params);
+    });
+    </script>
+
+    </div><div class="col-md-4">
+    {% if user.avatar %}
+    <img class="img-responsive" width="200px" height="200px" src={{ user.avatar }}>
+    {% else %}
+    <img class="img-responsive" width="200px" height="200px" src="https://cdn2.iconfinder.com/data/icons/metro-uinvert-dock/256/User_No-Frame.png" alt="No user image"/>
+    {% endif %}
+    <div class="edit-button"><input class="btn btn-primary" id="change-profile" data-toggle="modal" data-target="#profilemodal" type="submit" value="Edit"></div>
+    </div>
+<div id="profilemodal" class="modal fade"><div class="modal-content"><div class="modal-header">
+<h5 class="modal-title "></h5><button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="modal-body"><div class="container">
+{% crispy form form.helper %}</div></div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" data-dismiss="modal"  >Cancel</button>
+</div>
+</div>
+    <script>
+
+		var button = document.getElementById("change-profile"); 	
+		button.addEventListener("click",function(){
+				var elemodal = document.getElementsByClassName("modal-title");
+				elemodal[1].innerHTML = "Change Profile";
+				
+			});
+		$("#modal").on('hidden.bs.modal',function(e){
+			var modalbody=document.getElementsByClassName("modal-body")[1].firstChild;
+			while(modalbody.firstChild){
+				modalbody.removeChild(modalbody.firstChild);
+			}
+		});
+		document.getElementById("avatorupload").addEventListener("click",function(){
+		var input = document.getElementById('modal-input-value');
+        var csrf = document.getElementById("csrf").firstChild.value;
+        var http = new XMLHttpRequest();
+        var formData = new FormData();
+        var avator = input.files;
+        console.log(avator);
+        formData.append('avator',avator,avator.name);
+        formData.append('name','avator');
+        console.log(formData);
+        var url = "{% url 'profile' %}";
+        http.open("POST", url, true);
+
+        //Send the proper header information along with the request
+        // http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.setRequestHeader("X-CSRFToken", csrf);
+
+
+        http.onreadystatechange = function() {
+            //Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+               location.reload();
+            }
+        }
+        http.send(formData);
+    });
+    </script>
 </div>
 {% endblock %}
