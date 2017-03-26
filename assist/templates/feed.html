@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <!-- Optional theme -->
 <style>
-<<<<<<< HEAD
+
     .vertical{
         display: flex;
         flex-flow: column;
@@ -48,10 +48,43 @@
     border-style: inset;
     border-width: 1px;
 } 
+    #bookmarkedcourses{
+        background: black;
+        color: white;
+        height: 100%
+    }
 </style>
 {%  endblock %}
 {% block content %}
-<div class="container-fluid vertical">
+{% if bookmark %}
+    <div class="col-md-3" id="bookmarkedcourses">
+        <ul>
+            {% for bookmarkcourse in bookmark %}
+            <li>
+                <a href={% url 'course' department=bookmarkcourse.course.dept.acronym coursecode=bookmarkcourse.course.code %}>
+                    {{ bookmarkcourse.course.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-9 container-fluid ">
+    <div class="col-md-6">
+    {% for announce in feed %}
+        <div class="container-fluid feed-container">
+            <div class="row feed-title"><h3>{{ announce.title }}</h3></div>
+            <div class="row author"><div class="col-md-2 pull-left"><img class="img-responsive img-circle" src="https://yt3.ggpht.com/-Dqf3p5-NRus/AAAAAAAAAAI/AAAAAAAAAAA/OzD-6jB9ViM/s900-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="No user image"/></div><div class=" col-md-4 pull-left"><p class="text-primary">{{ announce.author.get_full_name }}</p></div><div class="pull-right"><p class="text-info">{{ announce.updated_on }}</p></div></div>
+            <hr>
+            <div class="row content"><p>{{ announce.description }}</p></div>
+            <div class="row"><strong>Attachments : </strong><a href={{ MEDIA_URL }}{{ announce.files }} target="_blank">{{ announce.files }}</a></div>
+        </div>
+    <br>
+    {% endfor %}
+    </div>
+    <div class="row"><div class="pull-left"><a href="{% url 'home' %}?start_from={{ next }}">See More</a></div></div>
+    </div>
+    {% else %}
+    <div class="container-fluid vertical">
     <div class="col-md-6">
     {% for announce in feed %}
         <div class="container-fluid feed-container">
@@ -66,5 +99,6 @@
     </div>
     <div class="row"><div class="pull-left"><a href="{% url 'feed' %}?start_from={{ next }}">See More</a></div></div>
 </div>
+    {% endif %}
 
 {% endblock %}
