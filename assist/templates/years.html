@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}COLLEGE ASSIST : Departments{% endblock %}
+<!-- priv -->
+{% block head %}
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+{%  endblock %}
+{% block content %}
+<div class="container">
+	<ul>
+		<li><a href="/department/{{ department }}/1/1">1 semester</a></li>
+		<li><a href="/department/{{ department }}/1/2">2 semester</a></li>
+		<li><a href="/department/{{ department }}/2/3">3 semester</a></li>
+		<li><a href="/department/{{ department }}/2/4">4 semester</a></li>
+		<li><a href="/department/{{ department }}/3/5">5 semester</a></li>
+		<li><a href="/department/{{ department }}/3/6">6 semester</a></li>
+		<li><a href="/department/{{ department }}/4/7">7 semester</a></li>
+		<li><a href="/department/{{ department }}/4/8">8 semester</a></li>
+	</ul>
+</div>
+
+{% endblock %}

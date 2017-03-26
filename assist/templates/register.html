@@ -8,7 +8,8 @@
 <!-- Optional theme -->
 {%  endblock %}
 {% block content %}
+<div class="container">
 {% crispy form form.helper %}
 <small>Already registered ? </small><a href={% url "login"  %}>Login here</a>
-
+</div>
 {% endblock %}
