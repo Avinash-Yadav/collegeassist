@@ -45,7 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined     = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active       = models.BooleanField(_('active'), default=True)
     is_admin 		= models.BooleanField(default=False)
-    avatar          = models.ImageField(upload_to='static/avatars/', null=True, blank=True)
+    avatar          = models.ImageField(upload_to='', null=True, blank=True)
     user_role	    = models.CharField(max_length=10,choices=(('student','student'),('instructor','instructor'),('super','super')),default='student')
 
     objects = UserManager()
@@ -96,7 +96,7 @@ class Student(models.Model):
     user = models.OneToOneField('User',on_delete=models.CASCADE, primary_key=True,)
     registration_no = models.CharField(max_length=20,blank=True,null=True)
     semester = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8)],blank=True,null=True)
-
+    branch   = models.CharField(max_length = 50,blank=False,null=False) # Can be changed into Foreign key of Department model.
     def __str__(self):
         return self.registration_no
     
@@ -148,7 +148,31 @@ class ExamPaper(models.Model):
 
 class Bookmark(models.Model):
     course         = models.ForeignKey('Course')
-    user          = models.ForeignKey('User')   
+    user           = models.ForeignKey('User')   
+
+class Feedback(models.Model):
+    title         = models.CharField(max_length=50,blank=False,null=False)
+    feedback      = models.TextField()
+    files         = models.FileField(upload_to='')
+    author        = models.ForeignKey('User')
+    added_on      = models.DateTimeField(auto_now_add=True)
+
+class Contributor(models.Model):
+    user          = models.ForeignKey('User')
+    paper         = models.IntegerField(default=0)
+    material      = models.IntegerField(default=0)
+    announcement  = models.IntegerField(default=0)
+    feedback      = models.IntegerField(default=0)
+    points        = models.IntegerField(default=0)
+
+class Stat(models.Model):
+    tag                = models.CharField(max_length=10,null=False)
+    updated_on         = models.DateTimeField(auto_now=True)
+    user_count         = models.IntegerField(default=0)
+    material_count     = models.IntegerField(default=0)
+    announcement_count = models.IntegerField(default=0)
+    paper_count        = models.IntegerField(default=0)
+    contributor_count  = models.IntegerField(default=0)
 
     
      

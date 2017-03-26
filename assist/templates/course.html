@@ -55,55 +55,55 @@
 
 {%  endblock %}
 {% block content %}
-<div class="container"><h2>{{ course.name }} - <small>{{ department.name }}</small></h2></div>
-<div class="courses-title">
-    <div class="pull-left"><span class="fa-stack fa-2x">
-        {% if is_bookmarked %}<i id="bookmark" onclick="bookmark();" class="fa fa-bookmark" aria-hidden="true"></i>
-        {% else %}<i id="bookmark" onclick="bookmark();" class="fa fa-bookmark-o" aria-hidden="true"></i>
-        {% endif %}
-        </span></div>
-    <div class="pull-left"><h2>{{ course.name }}</h2></div>
-</div>
-<span id="csrf">{% csrf_token %}</span>
-<script>
+<div class="container">
+    <div class="courses-title">
+        <div class="pull-left"><span class="fa-stack fa-2x">
+            {% if is_bookmarked %}<i id="bookmark" onclick="bookmark();" class="fa fa-bookmark" aria-hidden="true"></i>
+            {% else %}<i id="bookmark" onclick="bookmark();" class="fa fa-bookmark-o" aria-hidden="true"></i>
+            {% endif %}
+            </span></div>
+        <div class="pull-left"><h2>{{ course.name }}</h2></div>
+    </div>
+    <span id="csrf">{% csrf_token %}</span>
+    <script>
 
-    var bookmark = function(){
-    var s = document.getElementById("csrf").firstChild.value;
-    console.log(s);
-    var http = new XMLHttpRequest();
-    var url = "{% url 'bookmark' %}";
-    var params = "user={{ user.email }}&course={{ course.id }}";
-    http.open("POST", url, true);
+        var bookmark = function(){
+        var s = document.getElementById("csrf").firstChild.value;
+        console.log(s);
+        var http = new XMLHttpRequest();
+        var url = "{% url 'bookmark' %}";
+        var params = "user={{ user.email }}&course={{ course.id }}";
+        http.open("POST", url, true);
 
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.setRequestHeader("X-CSRFToken", s);
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.setRequestHeader("X-CSRFToken", s);
 
 
-    http.onreadystatechange = function() {
-        //Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-            var bookmark = document.getElementById('bookmark');
-            if(bookmark.className === 'fa fa-bookmark-o')
-                bookmark.className ='fa fa-bookmark';
-            else{
-                bookmark.className ='fa fa-bookmark-o';
+        http.onreadystatechange = function() {
+            //Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                var bookmark = document.getElementById('bookmark');
+                if(bookmark.className === 'fa fa-bookmark-o')
+                    bookmark.className ='fa fa-bookmark';
+                else{
+                    bookmark.className ='fa fa-bookmark-o';
+                }
             }
         }
+        http.send(params);
     }
-    http.send(params);
-}
-</script>
-<div id="exTab2" class="container">	
-<ul class="nav nav-tabs">
-			<li class="active">
-        <a  href="#1" data-toggle="tab">Announcements</a>
-			</li>
-			<li><a href="#2" data-toggle="tab">Material</a>
-			</li>
-			<li><a href="#3" data-toggle="tab">Exam Papers</a>
-			</li>
-		</ul>
+    </script>
+    <div id="exTab2" class="container">	
+        <ul class="nav nav-tabs">
+    			<li class="active">
+            <a  href="#1" data-toggle="tab">Announcements</a>
+    			</li>
+    			<li><a href="#2" data-toggle="tab">Material</a>
+    			</li>
+    			<li><a href="#3" data-toggle="tab">Exam Papers</a>
+    			</li>
+    		</ul>
 
 			<div class="tab-content ">
 			  <div class="tab-pane active" id="1">
@@ -131,5 +131,6 @@
                   </ul>
 				</div>
 			</div>
-  </div>
+    </div>
+</div>
 {% endblock %}
